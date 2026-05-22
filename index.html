@@ -3,230 +3,279 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RenderMesh 3D Printing</title>
+<title>RenderMesh Hologram UI</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700&display=swap" rel="stylesheet">
 
 <style>
 
 *{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
+margin:0;
+padding:0;
+box-sizing:border-box;
 }
 
 body{
-    font-family:'Orbitron',sans-serif;
-    background:#020617;
-    color:white;
-    overflow-x:hidden;
+font-family:'Orbitron',sans-serif;
+background:#020617;
+color:white;
+overflow-x:hidden;
 }
 
-/* Animated Background */
+/* HOLOGRAM BACKGROUND */
 
 body::before{
-    content:'';
-    position:fixed;
-    width:200%;
-    height:200%;
-    background:
-    radial-gradient(circle,#00ffff22 1px,transparent 1px);
-    background-size:40px 40px;
-    animation:moveBg 20s linear infinite;
-    z-index:-1;
+content:'';
+position:fixed;
+width:100%;
+height:100%;
+background:
+linear-gradient(rgba(0,255,255,0.07) 1px, transparent 1px),
+linear-gradient(90deg, rgba(0,255,255,0.07) 1px, transparent 1px);
+background-size:40px 40px;
+animation:gridMove 12s linear infinite;
+z-index:-2;
 }
 
-@keyframes moveBg{
-    from{
-        transform:translate(0,0);
-    }
-    to{
-        transform:translate(-200px,-200px);
-    }
+@keyframes gridMove{
+from{
+transform:translateY(0);
+}
+to{
+transform:translateY(40px);
+}
 }
 
-/* Navbar */
+/* Floating Glow */
+
+body::after{
+content:'';
+position:fixed;
+width:500px;
+height:500px;
+background:#00ffff33;
+border-radius:50%;
+filter:blur(120px);
+top:20%;
+left:50%;
+transform:translateX(-50%);
+z-index:-1;
+animation:pulse 4s infinite alternate;
+}
+
+@keyframes pulse{
+from{
+opacity:0.4;
+transform:translateX(-50%) scale(1);
+}
+to{
+opacity:0.8;
+transform:translateX(-50%) scale(1.2);
+}
+}
+
+/* NAVBAR */
 
 nav{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding:20px 10%;
-    backdrop-filter:blur(10px);
-    background:#0f172a88;
-    position:sticky;
-    top:0;
-    z-index:100;
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:20px 8%;
+backdrop-filter:blur(15px);
+background:#0f172a77;
+border-bottom:1px solid #00ffff55;
+position:sticky;
+top:0;
+z-index:100;
 }
 
-.logo{
-    font-size:28px;
-    font-weight:700;
-    color:#00ffff;
-    text-shadow:0 0 10px #00ffff;
+.logo img{
+width:110px;
+filter:drop-shadow(0 0 20px #00ffff);
 }
 
 nav ul{
-    display:flex;
-    gap:25px;
-    list-style:none;
+display:flex;
+gap:30px;
+list-style:none;
 }
 
 nav ul li a{
-    color:white;
-    text-decoration:none;
-    transition:0.3s;
+text-decoration:none;
+color:white;
+transition:0.3s;
 }
 
 nav ul li a:hover{
-    color:#00ffff;
+color:#00ffff;
+text-shadow:0 0 10px #00ffff;
 }
 
-/* Hero */
+/* HERO */
 
 .hero{
-    min-height:100vh;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    flex-direction:column;
-    text-align:center;
-    padding:20px;
+min-height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+flex-direction:column;
+text-align:center;
+padding:20px;
 }
 
 .hero h1{
-    font-size:70px;
-    color:#00ffff;
-    text-shadow:
-    0 0 10px #00ffff,
-    0 0 20px #00ffff,
-    0 0 40px #00ffff;
-    margin-bottom:20px;
+font-size:75px;
+color:#00ffff;
+text-shadow:
+0 0 10px #00ffff,
+0 0 20px #00ffff,
+0 0 40px #00ffff,
+0 0 80px #00ffff;
+animation:flicker 2s infinite alternate;
+}
+
+@keyframes flicker{
+0%{
+opacity:0.8;
+}
+100%{
+opacity:1;
+}
 }
 
 .hero p{
-    max-width:700px;
-    font-size:20px;
-    line-height:1.8;
-    color:#cbd5e1;
+max-width:800px;
+margin-top:30px;
+font-size:20px;
+line-height:1.8;
+color:#cbd5e1;
 }
 
+/* BUTTON */
+
 .btn{
-    margin-top:40px;
-    padding:15px 40px;
-    background:#00ffff;
-    color:black;
-    text-decoration:none;
-    border-radius:50px;
-    font-weight:bold;
-    transition:0.4s;
-    box-shadow:0 0 20px #00ffff;
+margin-top:40px;
+padding:18px 45px;
+border:1px solid #00ffff;
+background:#00ffff22;
+color:#00ffff;
+text-decoration:none;
+font-weight:bold;
+border-radius:50px;
+backdrop-filter:blur(15px);
+transition:0.4s;
+box-shadow:0 0 20px #00ffff55;
 }
 
 .btn:hover{
-    transform:scale(1.1);
-    box-shadow:0 0 40px #00ffff;
+transform:scale(1.1);
+background:#00ffff;
+color:black;
+box-shadow:0 0 40px #00ffff;
 }
 
-/* Services */
+/* HOLOGRAM CARDS */
 
-.services{
-    padding:100px 10%;
+.section{
+padding:100px 10%;
 }
 
 .section-title{
-    text-align:center;
-    font-size:45px;
-    margin-bottom:60px;
-    color:#00ffff;
+text-align:center;
+font-size:45px;
+margin-bottom:60px;
+color:#00ffff;
+text-shadow:0 0 20px #00ffff;
 }
 
-.service-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-    gap:30px;
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+gap:30px;
 }
 
 .card{
-    background:#0f172a;
-    border:1px solid #00ffff33;
-    border-radius:20px;
-    padding:40px 30px;
-    transition:0.4s;
-    box-shadow:0 0 20px #000;
+padding:40px 30px;
+background:rgba(15,23,42,0.5);
+border:1px solid rgba(0,255,255,0.3);
+border-radius:25px;
+backdrop-filter:blur(20px);
+transition:0.4s;
+position:relative;
+overflow:hidden;
+}
+
+.card::before{
+content:'';
+position:absolute;
+width:150%;
+height:3px;
+background:#00ffff;
+top:0;
+left:-100%;
+animation:scan 4s linear infinite;
+}
+
+@keyframes scan{
+0%{
+left:-100%;
+}
+100%{
+left:100%;
+}
 }
 
 .card:hover{
-    transform:translateY(-10px);
-    border-color:#00ffff;
-    box-shadow:0 0 30px #00ffff55;
+transform:translateY(-10px);
+box-shadow:0 0 40px #00ffff44;
 }
 
 .card h3{
-    margin-bottom:20px;
-    color:#00ffff;
+margin-bottom:20px;
+color:#00ffff;
 }
 
-/* Gallery */
+/* GALLERY */
 
 .gallery{
-    padding:100px 10%;
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+gap:20px;
 }
 
-.gallery-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
-    gap:20px;
+.gallery img{
+width:100%;
+border-radius:20px;
+transition:0.4s;
+border:1px solid #00ffff44;
 }
 
-.gallery-grid img{
-    width:100%;
-    border-radius:20px;
-    transition:0.4s;
+.gallery img:hover{
+transform:scale(1.05);
+box-shadow:0 0 40px #00ffff;
 }
 
-.gallery-grid img:hover{
-    transform:scale(1.05);
-    box-shadow:0 0 30px #00ffff;
-}
-
-/* Contact */
-
-.contact{
-    padding:100px 10%;
-    text-align:center;
-}
-
-.contact h2{
-    color:#00ffff;
-    margin-bottom:20px;
-}
-
-.contact p{
-    color:#cbd5e1;
-}
-
-/* Footer */
+/* FOOTER */
 
 footer{
-    padding:30px;
-    text-align:center;
-    background:#0f172a;
-    margin-top:50px;
-    color:#94a3b8;
+padding:40px;
+text-align:center;
+background:#0f172a;
+border-top:1px solid #00ffff33;
+color:#94a3b8;
 }
 
-/* Responsive */
+/* MOBILE */
 
 @media(max-width:768px){
 
 .hero h1{
-    font-size:45px;
+font-size:45px;
 }
 
 nav{
-    flex-direction:column;
-    gap:20px;
+flex-direction:column;
+gap:20px;
 }
 
 }
@@ -237,90 +286,99 @@ nav{
 <body>
 
 <nav>
-    <div class="logo">RenderMesh</div>
 
-    <ul>
-        <li><a href="#">Home</a></li>
-        <li><a href="#">Services</a></li>
-        <li><a href="#">Gallery</a></li>
-        <li><a href="#">Contact</a></li>
-    </ul>
+<div class="logo">
+<img src="logo.png">
+</div>
+
+<ul>
+<li><a href="#">Home</a></li>
+<li><a href="#">Services</a></li>
+<li><a href="#">Gallery</a></li>
+<li><a href="#">Contact</a></li>
+</ul>
+
 </nav>
 
 <section class="hero">
 
-    <h1>FUTURE OF 3D PRINTING</h1>
+<h1>HOLOGRAM 3D PRINTING</h1>
 
-    <p>
-        High precision futuristic 3D printing services for prototypes,
-        engineering components, custom products and creative models.
-    </p>
+<p>
+Advanced futuristic 3D printing solutions for prototypes,
+engineering parts, miniatures and custom manufacturing.
+</p>
 
-    <a class="btn" href="https://wa.me/919960828429">
-        Contact Now
-    </a>
-
-</section>
-
-<section class="services">
-
-    <h2 class="section-title">OUR SERVICES</h2>
-
-    <div class="service-grid">
-
-        <div class="card">
-            <h3>Prototype Printing</h3>
-            <p>Fast and accurate industrial grade prototype manufacturing.</p>
-        </div>
-
-        <div class="card">
-            <h3>Custom Products</h3>
-            <p>Custom designed functional parts and mechanical components.</p>
-        </div>
-
-        <div class="card">
-            <h3>Miniatures</h3>
-            <p>Detailed miniature models and high quality figurines.</p>
-        </div>
-
-    </div>
+<a class="btn" href="https://wa.me/919960828429">
+START PROJECT
+</a>
 
 </section>
 
-<section class="gallery">
+<section class="section">
 
-    <h2 class="section-title">GALLERY</h2>
+<h2 class="section-title">SERVICES</h2>
 
-    <div class="gallery-grid">
+<div class="grid">
 
-        <img src="https://images.unsplash.com/photo-1581092921461-eab62e97a780?q=80&w=1200&auto=format&fit=crop">
+<div class="card">
+<h3>Prototype Printing</h3>
+<p>
+Industrial-grade prototype manufacturing with high precision.
+</p>
+</div>
 
-        <img src="https://images.unsplash.com/photo-1565043589221-1a6fd9ae45c7?q=80&w=1200&auto=format&fit=crop">
+<div class="card">
+<h3>Custom Components</h3>
+<p>
+Mechanical and customized 3D printed functional parts.
+</p>
+</div>
 
-        <img src="https://images.unsplash.com/photo-1532619187608-e5375cab36aa?q=80&w=1200&auto=format&fit=crop">
+<div class="card">
+<h3>Miniatures</h3>
+<p>
+Detailed figurines and creative model printing.
+</p>
+</div>
 
-    </div>
+</div>
 
 </section>
 
-<section class="contact">
+<section class="section">
 
-    <h2>START YOUR PROJECT</h2>
+<h2 class="section-title">PROJECT GALLERY</h2>
 
-    <p>
-        Based in Vasai • Serving all over India
-    </p>
+<div class="gallery">
 
-    <a class="btn" href="https://wa.me/919960828429">
-        WhatsApp Us
-    </a>
+<img src="https://images.unsplash.com/photo-1581092921461-eab62e97a780?q=80&w=1200&auto=format&fit=crop">
+
+<img src="https://images.unsplash.com/photo-1565043589221-1a6fd9ae45c7?q=80&w=1200&auto=format&fit=crop">
+
+<img src="https://images.unsplash.com/photo-1532619187608-e5375cab36aa?q=80&w=1200&auto=format&fit=crop">
+
+</div>
+
+</section>
+
+<section class="section" style="text-align:center;">
+
+<h2 class="section-title">CONTACT</h2>
+
+<p style="margin-bottom:30px;">
+Based in Vasai • Serving all over India
+</p>
+
+<a class="btn" href="https://wa.me/919960828429">
+WHATSAPP NOW
+</a>
 
 </section>
 
 <footer>
 
-    © 2026 RenderMesh 3D Printing
-              Chill maadi
+© 2026 RenderMesh • Futuristic 3D Printing
 
 </footer>
 
