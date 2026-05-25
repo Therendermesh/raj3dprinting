@@ -1,13 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RenderMesh Hologram UI</title>
+
+<title>RenderMesh 3D Printing</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700&display=swap" rel="stylesheet">
 
 <style>
+
+/* RESET */
 
 *{
 margin:0;
@@ -20,9 +25,10 @@ font-family:'Orbitron',sans-serif;
 background:#020617;
 color:white;
 overflow-x:hidden;
+cursor:none;
 }
 
-/* HOLOGRAM BACKGROUND */
+/* CYBER GRID */
 
 body::before{
 content:'';
@@ -30,11 +36,11 @@ position:fixed;
 width:100%;
 height:100%;
 background:
-linear-gradient(rgba(0,255,255,0.07) 1px, transparent 1px),
-linear-gradient(90deg, rgba(0,255,255,0.07) 1px, transparent 1px);
+linear-gradient(rgba(0,255,255,0.06) 1px, transparent 1px),
+linear-gradient(90deg, rgba(0,255,255,0.06) 1px, transparent 1px);
 background-size:40px 40px;
-animation:gridMove 12s linear infinite;
-z-index:-2;
+animation:gridMove 10s linear infinite;
+z-index:-3;
 }
 
 @keyframes gridMove{
@@ -46,32 +52,46 @@ transform:translateY(40px);
 }
 }
 
-/* Floating Glow */
+/* SCANLINES */
 
 body::after{
 content:'';
 position:fixed;
-width:500px;
-height:500px;
-background:#00ffff33;
-border-radius:50%;
-filter:blur(120px);
-top:20%;
-left:50%;
-transform:translateX(-50%);
-z-index:-1;
-animation:pulse 4s infinite alternate;
+width:100%;
+height:100%;
+background:
+linear-gradient(
+to bottom,
+transparent 95%,
+rgba(0,255,255,0.04) 100%
+);
+background-size:100% 4px;
+pointer-events:none;
+z-index:999;
+animation:scanMove 0.3s linear infinite;
 }
 
-@keyframes pulse{
+@keyframes scanMove{
 from{
-opacity:0.4;
-transform:translateX(-50%) scale(1);
+background-position:0 0;
 }
 to{
-opacity:0.8;
-transform:translateX(-50%) scale(1.2);
+background-position:0 4px;
 }
+}
+
+/* CURSOR GLOW */
+
+.cursor-glow{
+position:fixed;
+width:250px;
+height:250px;
+background:#00ffff22;
+border-radius:50%;
+pointer-events:none;
+filter:blur(80px);
+transform:translate(-50%,-50%);
+z-index:998;
 }
 
 /* NAVBAR */
@@ -81,12 +101,12 @@ display:flex;
 justify-content:space-between;
 align-items:center;
 padding:20px 8%;
-backdrop-filter:blur(15px);
-background:#0f172a77;
-border-bottom:1px solid #00ffff55;
 position:sticky;
 top:0;
 z-index:100;
+background:#020617aa;
+backdrop-filter:blur(15px);
+border-bottom:1px solid #00ffff33;
 }
 
 .logo img{
@@ -121,34 +141,140 @@ align-items:center;
 flex-direction:column;
 text-align:center;
 padding:20px;
+position:relative;
+overflow:hidden;
 }
 
-.hero h1{
+/* HUD CORNERS */
+
+.hud{
+position:absolute;
+width:120px;
+height:120px;
+border-color:#00ffff;
+animation:hudPulse 2s infinite alternate;
+}
+
+.top-left{
+top:40px;
+left:40px;
+border-top:3px solid #00ffff;
+border-left:3px solid #00ffff;
+}
+
+.top-right{
+top:40px;
+right:40px;
+border-top:3px solid #00ffff;
+border-right:3px solid #00ffff;
+}
+
+.bottom-left{
+bottom:40px;
+left:40px;
+border-bottom:3px solid #00ffff;
+border-left:3px solid #00ffff;
+}
+
+.bottom-right{
+bottom:40px;
+right:40px;
+border-bottom:3px solid #00ffff;
+border-right:3px solid #00ffff;
+}
+
+@keyframes hudPulse{
+from{
+opacity:0.5;
+}
+to{
+opacity:1;
+filter:drop-shadow(0 0 15px #00ffff);
+}
+}
+
+/* GLITCH TITLE */
+
+.glitch{
+position:relative;
 font-size:75px;
 color:#00ffff;
 text-shadow:
 0 0 10px #00ffff,
 0 0 20px #00ffff,
-0 0 40px #00ffff,
-0 0 80px #00ffff;
+0 0 40px #00ffff;
 animation:flicker 2s infinite alternate;
 }
 
+.glitch::before,
+.glitch::after{
+content:attr(data-text);
+position:absolute;
+left:0;
+top:0;
+width:100%;
+height:100%;
+}
+
+.glitch::before{
+left:2px;
+text-shadow:-2px 0 magenta;
+clip-path:polygon(0 0,100% 0,100% 45%,0 45%);
+animation:glitchTop 1s infinite linear alternate-reverse;
+}
+
+.glitch::after{
+left:-2px;
+text-shadow:-2px 0 cyan;
+clip-path:polygon(0 60%,100% 60%,100% 100%,0 100%);
+animation:glitchBottom 1.2s infinite linear alternate-reverse;
+}
+
+@keyframes glitchTop{
+100%{
+transform:translate(-5px,-5px);
+}
+}
+
+@keyframes glitchBottom{
+100%{
+transform:translate(5px,5px);
+}
+}
+
 @keyframes flicker{
-0%{
+from{
 opacity:0.8;
 }
-100%{
+to{
 opacity:1;
 }
 }
 
+/* HERO TEXT */
+
 .hero p{
-max-width:800px;
+max-width:750px;
 margin-top:30px;
 font-size:20px;
 line-height:1.8;
 color:#cbd5e1;
+}
+
+/* TERMINAL */
+
+.terminal{
+margin-top:25px;
+font-family:monospace;
+color:#00ff99;
+letter-spacing:3px;
+animation:blink 1s infinite;
+}
+
+@keyframes blink{
+50%{
+opacity:0.5;
+}
 }
 
 /* BUTTON */
@@ -156,25 +282,45 @@ color:#cbd5e1;
 .btn{
 margin-top:40px;
 padding:18px 45px;
-border:1px solid #00ffff;
-background:#00ffff22;
-color:#00ffff;
-text-decoration:none;
-font-weight:bold;
 border-radius:50px;
-backdrop-filter:blur(15px);
+text-decoration:none;
+color:#00ffff;
+border:1px solid #00ffff;
+background:#00ffff11;
 transition:0.4s;
-box-shadow:0 0 20px #00ffff55;
+box-shadow:0 0 20px #00ffff44;
+position:relative;
+overflow:hidden;
 }
 
 .btn:hover{
-transform:scale(1.1);
 background:#00ffff;
 color:black;
+transform:scale(1.1);
 box-shadow:0 0 40px #00ffff;
 }
 
-/* HOLOGRAM CARDS */
+.btn::before{
+content:'';
+position:absolute;
+top:0;
+left:-100%;
+width:100%;
+height:100%;
+background:linear-gradient(
+90deg,
+transparent,
+rgba(255,255,255,0.5),
+transparent
+);
+transition:0.5s;
+}
+
+.btn:hover::before{
+left:100%;
+}
+
+/* SECTION */
 
 .section{
 padding:100px 10%;
@@ -188,16 +334,20 @@ color:#00ffff;
 text-shadow:0 0 20px #00ffff;
 }
 
+/* GRID */
+
 .grid{
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
 gap:30px;
 }
 
+/* CARDS */
+
 .card{
-padding:40px 30px;
 background:rgba(15,23,42,0.5);
 border:1px solid rgba(0,255,255,0.3);
+padding:40px 30px;
 border-radius:25px;
 backdrop-filter:blur(20px);
 transition:0.4s;
@@ -205,29 +355,26 @@ position:relative;
 overflow:hidden;
 }
 
+.card:hover{
+transform:translateY(-10px);
+box-shadow:0 0 40px #00ffff55;
+}
+
 .card::before{
 content:'';
 position:absolute;
+top:0;
+left:-100%;
 width:150%;
 height:3px;
 background:#00ffff;
-top:0;
-left:-100%;
 animation:scan 4s linear infinite;
 }
 
 @keyframes scan{
-0%{
-left:-100%;
-}
 100%{
 left:100%;
 }
-}
-
-.card:hover{
-transform:translateY(-10px);
-box-shadow:0 0 40px #00ffff44;
 }
 
 .card h3{
@@ -247,7 +394,7 @@ gap:20px;
 width:100%;
 border-radius:20px;
 transition:0.4s;
-border:1px solid #00ffff44;
+border:1px solid #00ffff33;
 }
 
 .gallery img:hover{
@@ -269,7 +416,7 @@ color:#94a3b8;
 
 @media(max-width:768px){
 
-.hero h1{
+.glitch{
 font-size:45px;
 }
 
@@ -281,9 +428,12 @@ gap:20px;
 }
 
 </style>
+
 </head>
 
 <body>
+
+<div class="cursor-glow"></div>
 
 <nav>
 
@@ -302,14 +452,25 @@ gap:20px;
 
 <section class="hero">
 
-<h1>HOLOGRAM 3D PRINTING</h1>
+<div class="hud top-left"></div>
+<div class="hud top-right"></div>
+<div class="hud bottom-left"></div>
+<div class="hud bottom-right"></div>
+
+<h1 class="glitch" data-text="RENDERMESH AI">
+RENDERMESH AI
+</h1>
 
 <p>
-Advanced futuristic 3D printing solutions for prototypes,
-engineering parts, miniatures and custom manufacturing.
+Futuristic 3D printing solutions for prototypes,
+mechanical parts, miniatures and custom manufacturing.
 </p>
 
-<a class="btn" href="https://wa.me/919960828429">
+<div class="terminal">
+SYSTEM ONLINE • AI CONNECTED
+</div>
+
+<a class="btn" href="https://wa.me/919999999999">
 START PROJECT
 </a>
 
@@ -317,28 +478,30 @@ START PROJECT
 
 <section class="section">
 
-<h2 class="section-title">SERVICES</h2>
+<h2 class="section-title">
+SERVICES
+</h2>
 
 <div class="grid">
 
 <div class="card">
 <h3>Prototype Printing</h3>
 <p>
-Industrial-grade prototype manufacturing with high precision.
+Industrial precision prototype manufacturing.
 </p>
 </div>
 
 <div class="card">
 <h3>Custom Components</h3>
 <p>
-Mechanical and customized 3D printed functional parts.
+Functional mechanical and engineering parts.
 </p>
 </div>
 
 <div class="card">
 <h3>Miniatures</h3>
 <p>
-Detailed figurines and creative model printing.
+Detailed figurines and creative 3D models.
 </p>
 </div>
 
@@ -348,7 +511,9 @@ Detailed figurines and creative model printing.
 
 <section class="section">
 
-<h2 class="section-title">PROJECT GALLERY</h2>
+<h2 class="section-title">
+PROJECT GALLERY
+</h2>
 
 <div class="gallery">
 
@@ -364,13 +529,15 @@ Detailed figurines and creative model printing.
 
 <section class="section" style="text-align:center;">
 
-<h2 class="section-title">CONTACT</h2>
+<h2 class="section-title">
+CONTACT
+</h2>
 
 <p style="margin-bottom:30px;">
-Based in Vasai • Serving all over India
+Based in Vasai • Serving All Over India
 </p>
 
-<a class="btn" href="https://wa.me/919960828429">
+<a class="btn" href="https://wa.me/919999999999">
 WHATSAPP NOW
 </a>
 
@@ -378,9 +545,23 @@ WHATSAPP NOW
 
 <footer>
 
-© 2026 RenderMesh • Futuristic 3D Printing
+© 2026 RenderMesh • Cyberpunk 3D Printing
 
 </footer>
 
+<script>
+
+const glow=document.querySelector('.cursor-glow');
+
+document.addEventListener('mousemove',(e)=>{
+
+glow.style.left=e.clientX+'px';
+glow.style.top=e.clientY+'px';
+
+});
+
+</script>
+
 </body>
+
 </html>
